@@ -1,0 +1,47 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<h2>Criar postagem</h2>
+<form method="post" action="{% if not post %}/blog/create{% else %}/blog/update/{{post.id}}{% endif %}">
+  {% csrf_token %}
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputEmail4">Titulo do post</label>
+      <input type="text" name="title" class="form-control" value="{{post.title}}">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label>Slug</label>
+      <input type="text" name="slug" class="form-control" value="{{post.slug}}" />
+    </div>
+    <div class="form-group col-md-4">
+      <label>ID do Autor</label>
+      <select name="author_id" class="form-control">
+        <option value=""></option>
+        {% for user in users %}
+          <option value="{{user.id}}" {% if user.id == post.author_id%}selected{% endif%}>{{user.username}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group col-md-4">
+      <label>Status do post</label>
+      <select name="status" class="form-control">
+        <option value=""></option>
+        <option value="draft">Draft</option>
+        <option value="published">Published</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label>Texto do post</label>
+      <textarea name="body" class="form-control">{{post.body}}</textarea>
+    </div>
+  </div>
+  <div class="form-row">
+    <a href="{% url 'blog:post_list' %}" class="btn btn-light">Voltar para listagem</a>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+  </div
+</form>
+{% endblock %}
